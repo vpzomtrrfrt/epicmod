@@ -1,0 +1,10 @@
+[
+{
+  "modid": "epicmod",
+  "name": "Epic Mod",
+  "description": "Adds Epics into Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "authorList": ["VpzomTrrfrt"]
+}
+]
