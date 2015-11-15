@@ -3,17 +3,17 @@ package net.reederhome.colin.epicmod.powers;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.reederhome.colin.epicmod.api.EpicPowerType;
 import net.reederhome.colin.epicmod.api.IEpicPower;
 
-public class PowerSetFire implements IEpicPower {
+public class PowerSummonWater implements IEpicPower {
 
 	@Override
 	public String getName() {
-		return "setFire";
+		return "water";
 	}
 
 	@Override
@@ -24,21 +24,17 @@ public class PowerSetFire implements IEpicPower {
 	@Override
 	public void activatePower(Event event) {
 		PlayerInteractEvent evt = (PlayerInteractEvent)event;
-		ItemStack stack = new ItemStack(Items.flint_and_steel);
-		stack.getItem().onItemUse(stack, evt.entityPlayer, evt.entity.worldObj, evt.x, evt.y, evt.z, evt.face, 0, 0, 0);
-		evt.setCanceled(true);
+		ItemStack stack = new ItemStack(Items.water_bucket);
+		stack.getItem().onItemRightClick(stack, evt.world, evt.entityPlayer);
+		event.setCanceled(true);
 	}
 
 	@Override
-	public void deactivatePower(EntityLivingBase ent) {}
+	public void deactivatePower(EntityLivingBase base) {}
 
 	@Override
 	public int getLevel() {
 		return 1;
-	}
-	
-	public boolean equals(Object o) {
-		return o.getClass()==getClass();
 	}
 
 }

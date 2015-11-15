@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.reederhome.colin.epicmod.api.EpicApi;
 import net.reederhome.colin.epicmod.powers.PowerSetFire;
+import net.reederhome.colin.epicmod.powers.PowerSummonWater;
 import net.reederhome.colin.epicmod.powers.PowerTurnToBlock;
 import net.reederhome.colin.epicmod.weaknesses.WeaknessWater;
 import net.reederhome.colin.epicmod.weaknesses.effects.EffectDamage;
@@ -26,6 +27,7 @@ public class EpicMod {
 		MinecraftForge.EVENT_BUS.register(EpicRegistry.get());
 		EpicApi.registerPower(PowerSetFire.class);
 		EpicApi.registerPower(PowerTurnToBlock.class, PowerTurnToBlock.baseName);
+		EpicApi.registerPower(PowerSummonWater.class);
 		EpicApi.registerWeakness(WeaknessWater.class, WeaknessWater.baseName);
 		EpicApi.registerWeaknessEffect(EffectDamage.class);
 	}

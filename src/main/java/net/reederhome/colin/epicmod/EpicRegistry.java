@@ -61,6 +61,7 @@ public class EpicRegistry {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Saving");
 	}
 	
 	public IEpicData getDataFromPlayer(String name) {
@@ -245,6 +246,7 @@ public class EpicRegistry {
 	
 	@SubscribeEvent
 	public void onBlockClicked(PlayerInteractEvent event) {
+		if(event.entity.worldObj.isRemote) return;
 		EntityPlayer p = event.entityPlayer;
 		IEpicData d = EpicRegistry.get().getDataFromPlayer(p);
 		if(d.isEpic() && p.isSneaking()) {
