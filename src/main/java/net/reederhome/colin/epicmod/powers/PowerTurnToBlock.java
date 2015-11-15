@@ -32,7 +32,7 @@ public class PowerTurnToBlock implements IEpicPower {
 
 	@Override
 	public EpicPowerType getType() {
-		return EpicPowerType.USABLE;
+		return EpicPowerType.USABLE_BLOCK;
 	}
 
 	@Override

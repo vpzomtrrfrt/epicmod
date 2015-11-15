@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.reederhome.colin.epicmod.api.EpicPowerType;
 import net.reederhome.colin.epicmod.api.IEpicData;
 import net.reederhome.colin.epicmod.api.IEpicPower;
 import net.reederhome.colin.epicmod.api.IEpicWeakness;
@@ -64,10 +65,26 @@ public class EpicData implements IEpicData {
 			int curLvl = l.get(0).getLevel();
 			weakness = EpicRegistry.get().randomWeakness(curLvl);
 			int skipped = 0;
+			int blocks = 0;
+			int blocks2 = 0;
+			if(l.get(0).getType() == EpicPowerType.USABLE_AIR) {
+				blocks++;
+			}
+			if(l.get(0).getType() == EpicPowerType.USABLE_BLOCK) {
+				blocks2++;
+				blocks++;
+			}
 			while(curLvl<weakness.getLevel() && skipped < 10) {
 				IEpicPower pwr = EpicRegistry.get().randomPower(weakness.getLevel()+1-curLvl);
-				if(!l.contains(pwr)) {
+				if(!l.contains(pwr) && (blocks<3 || (pwr.getType() != EpicPowerType.USABLE_AIR && pwr.getType() != EpicPowerType.USABLE_BLOCK)) && (pwr.getType() != EpicPowerType.USABLE_BLOCK || blocks2<2)) {
 					l.add(pwr);
+					if(pwr.getType() == EpicPowerType.USABLE_AIR) {
+						blocks++;
+					}
+					if(pwr.getType() == EpicPowerType.USABLE_BLOCK) {
+						blocks2++;
+						blocks++;
+					}
 				}
 				else {
 					skipped++;

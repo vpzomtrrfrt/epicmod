@@ -15,15 +15,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.reederhome.colin.epicmod.api.EpicPowerType;
 import net.reederhome.colin.epicmod.api.EpicWeaknessType;
 import net.reederhome.colin.epicmod.api.IEpicData;
 import net.reederhome.colin.epicmod.api.IEpicPower;
 import net.reederhome.colin.epicmod.api.IEpicWeakness;
 import net.reederhome.colin.epicmod.api.IEpicWeaknessEffect;
+import net.reederhome.colin.epicmod.network.MessageAirPower;
 
 public class EpicRegistry {
 
@@ -246,25 +247,44 @@ public class EpicRegistry {
 	
 	@SubscribeEvent
 	public void onBlockClicked(PlayerInteractEvent event) {
-		if(event.entity.worldObj.isRemote) return;
 		EntityPlayer p = event.entityPlayer;
-		IEpicData d = EpicRegistry.get().getDataFromPlayer(p);
-		if(d.isEpic() && p.isSneaking()) {
-			int thing = 0;
-			if(event.action==PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-				thing++;
+		if(p.getHeldItem()!=null) return;
+		if(p.worldObj.isRemote) {
+			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
+				EpicMod.proxy.netWrap.sendToServer(new MessageAirPower());
 			}
-			List<IEpicPower> poss = new ArrayList<IEpicPower>();
+			return;
+		}
+		IEpicData d = EpicRegistry.get().getDataFromPlayer(p);
+		boolean happen = false;
+		if(d.isEpic() && p.isSneaking()) {
 			IEpicPower[] powerList = d.getPowers();
-			for(int i = 0; i < powerList.length; i++) {
-				if(powerList[i].getType()==EpicPowerType.USABLE) {
-					poss.add(powerList[i]);
+			if(event.action!=PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
+				int thing = 0;
+				if(event.action==PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+					thing++;
+				}
+				List<IEpicPower> poss = new ArrayList<IEpicPower>();
+				for(int i = 0; i < powerList.length; i++) {
+					if(powerList[i].getType()==EpicPowerType.USABLE_BLOCK) {
+						poss.add(powerList[i]);
+					}
+				}
+				if(poss.size()>0) {
+					thing = thing % poss.size();
+					IEpicPower chosen = poss.get(thing);
+					chosen.activatePower(event);
+					chosen.deactivatePower(p);
+					happen = true;
 				}
 			}
-			thing = thing % poss.size();
-			IEpicPower chosen = poss.get(thing);
-			chosen.activatePower(event);
-			chosen.deactivatePower(p);
+			for(int i = 0; i < powerList.length && !happen; i++) {
+				if(powerList[i].getType()==EpicPowerType.USABLE_AIR) {
+					powerList[i].activatePower(event);
+					powerList[i].deactivatePower(p);
+					happen = true;
+				}
+			}
 		}
 	}
 }

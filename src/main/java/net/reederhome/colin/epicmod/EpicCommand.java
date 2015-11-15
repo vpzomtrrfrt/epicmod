@@ -5,6 +5,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.reederhome.colin.epicmod.api.IEpicData;
+import net.reederhome.colin.epicmod.api.IEpicPower;
 
 public class EpicCommand extends CommandBase {
 
@@ -40,8 +42,21 @@ public class EpicCommand extends CommandBase {
 				else {
 					player = getCommandSenderAsPlayer(arg0);
 				}
-				String tr = EpicRegistry.get().getDataFromPlayer(player).isEpic()?"That player is an epic.":"That player is not an epic.";
+				IEpicData d = EpicRegistry.get().getDataFromPlayer(player);
+				String tr = d.isEpic()?"That player is an epic.":"That player is not an epic.";
 				player.addChatMessage(new ChatComponentText(tr));
+				if(d.isEpic()) {
+					String pls = "Powers: ";
+					IEpicPower[] powers = d.getPowers();
+					for(int i = 0; i < powers.length; i++) {
+						if(i!=0) {
+							pls += ", ";
+						}
+						pls += powers[i].getName();
+					}
+					player.addChatMessage(new ChatComponentText(pls));
+					player.addChatMessage(new ChatComponentText("Weakness: "+d.getWeakness().getName()));
+				}
 			}
 			else {
 				throw new WrongUsageException("No such action");
