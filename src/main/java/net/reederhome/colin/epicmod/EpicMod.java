@@ -19,8 +19,10 @@ import net.reederhome.colin.epicmod.powers.PowerJumpBoost;
 import net.reederhome.colin.epicmod.powers.PowerSetFire;
 import net.reederhome.colin.epicmod.powers.PowerSummonWater;
 import net.reederhome.colin.epicmod.powers.PowerTurnToBlock;
+import net.reederhome.colin.epicmod.weaknesses.WeaknessFire;
 import net.reederhome.colin.epicmod.weaknesses.WeaknessWater;
 import net.reederhome.colin.epicmod.weaknesses.effects.EffectDamage;
+import net.reederhome.colin.epicmod.weaknesses.effects.EffectHunger;
 
 @Mod(modid = EpicMod.MODID, name = EpicMod.NAME)
 public class EpicMod {
@@ -44,7 +46,9 @@ public class EpicMod {
 		EpicApi.registerPower(PowerFireResistance.class);
 		EpicApi.registerPower(PowerJumpBoost.class, PowerJumpBoost.baseName);
 		EpicApi.registerWeakness(WeaknessWater.class, WeaknessWater.baseName);
+		EpicApi.registerWeakness(WeaknessFire.class, WeaknessFire.baseName);
 		EpicApi.registerWeaknessEffect(EffectDamage.class);
+		EpicApi.registerWeaknessEffect(EffectHunger.class);
 		
 		proxy.things();
 	}

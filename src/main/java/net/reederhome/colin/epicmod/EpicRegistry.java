@@ -80,6 +80,14 @@ public class EpicRegistry {
 		return getDataFromPlayer(p.getCommandSenderName());
 	}
 	
+	public void revokePowers(String name) {
+		epicMap.remove(name);
+	}
+	
+	public void revokePowers(ICommandSender p) {
+		revokePowers(p.getCommandSenderName());
+	}
+	
 	public IEpicPower loadPower(String name) {
 		try {
 			int ind = name.indexOf('.');

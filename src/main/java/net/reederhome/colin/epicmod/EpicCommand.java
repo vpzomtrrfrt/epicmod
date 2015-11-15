@@ -17,7 +17,7 @@ public class EpicCommand extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender arg0) {
-		return "/epic <grant|check> [player]";
+		return "/epic <grant|check|revoke> [player]";
 	}
 	
 	@Override
@@ -62,6 +62,16 @@ public class EpicCommand extends CommandBase {
 					player.addChatMessage(new ChatComponentText(pls));
 					player.addChatMessage(new ChatComponentText("Weakness: "+d.getWeakness().getName()));
 				}
+			}
+			else if(arg1[0].equalsIgnoreCase("revoke")) {
+				EntityPlayer player;
+				if(arg1.length>1) {
+					player = getPlayer(arg0, arg1[1]);
+				}
+				else {
+					player = getCommandSenderAsPlayer(arg0);
+				}
+				EpicRegistry.get().revokePowers(player);
 			}
 			else {
 				throw new WrongUsageException("No such action");
