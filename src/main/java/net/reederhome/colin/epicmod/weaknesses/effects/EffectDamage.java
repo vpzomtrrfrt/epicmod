@@ -18,7 +18,7 @@ public class EffectDamage implements IEpicWeaknessEffect {
 
 	@Override
 	public void apply(EntityLivingBase ent) {
-		ent.attackEntityFrom(DamageSource.drown, 0.1f);
+		ent.attackEntityFrom(DamageSource.drown, 0.4f);
 	}
 
 	@Override

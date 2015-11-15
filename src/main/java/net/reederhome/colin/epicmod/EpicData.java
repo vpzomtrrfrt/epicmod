@@ -3,6 +3,8 @@ package net.reederhome.colin.epicmod;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -58,6 +60,21 @@ public class EpicData implements IEpicData {
 		this.name = name;
 	}
 	
+	private boolean pwrConflict(Collection<IEpicPower> l, String name) {
+		Iterator<IEpicPower> it = l.iterator();
+		while(it.hasNext()) {
+			IEpicPower c = it.next();
+			if(c.getName().equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean pwrConflict(Collection<IEpicPower> l, IEpicPower power) {
+		return pwrConflict(l, power.getName());
+	}
+	
 	public void makeEpic() {
 		if(!isEpic()) {
 			List<IEpicPower> l = new ArrayList<IEpicPower>();
@@ -76,7 +93,7 @@ public class EpicData implements IEpicData {
 			}
 			while(curLvl<weakness.getLevel() && skipped < 10) {
 				IEpicPower pwr = EpicRegistry.get().randomPower(weakness.getLevel()+1-curLvl);
-				if(!l.contains(pwr) && (blocks<3 || (pwr.getType() != EpicPowerType.USABLE_AIR && pwr.getType() != EpicPowerType.USABLE_BLOCK)) && (pwr.getType() != EpicPowerType.USABLE_BLOCK || blocks2<2)) {
+				if(!pwrConflict(l, pwr) && (blocks<3 || (pwr.getType() != EpicPowerType.USABLE_AIR && pwr.getType() != EpicPowerType.USABLE_BLOCK)) && (pwr.getType() != EpicPowerType.USABLE_BLOCK || blocks2<2)) {
 					l.add(pwr);
 					if(pwr.getType() == EpicPowerType.USABLE_AIR) {
 						blocks++;
