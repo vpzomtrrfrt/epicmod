@@ -19,6 +19,11 @@ public class EpicCommand extends CommandBase {
 	public String getCommandUsage(ICommandSender arg0) {
 		return "/epic <grant|check> [player]";
 	}
+	
+	@Override
+	public int getRequiredPermissionLevel() {
+		return 2;
+	};
 
 	@Override
 	public void processCommand(ICommandSender arg0, String[] arg1) {

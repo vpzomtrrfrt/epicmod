@@ -27,7 +27,6 @@ public class MessageAirPower implements IMessage {
 				for(int i = 0; i < powers.length; i++) {
 					if(powers[i].getType()==EpicPowerType.USABLE_AIR) {
 						powers[i].activatePower(new PlayerInteractEvent(p, PlayerInteractEvent.Action.RIGHT_CLICK_AIR, (int)p.posX, (int)p.posY, (int)p.posZ, 0, p.worldObj));
-						powers[i].deactivatePower(p);
 						return null;
 					}
 				}

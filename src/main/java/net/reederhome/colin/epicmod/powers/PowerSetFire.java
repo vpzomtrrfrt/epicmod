@@ -30,9 +30,6 @@ public class PowerSetFire implements IEpicPower {
 	}
 
 	@Override
-	public void deactivatePower(EntityLivingBase ent) {}
-
-	@Override
 	public int getLevel() {
 		return 1;
 	}

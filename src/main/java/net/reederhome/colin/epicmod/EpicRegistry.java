@@ -241,6 +241,12 @@ public class EpicRegistry {
 				if(weak.getType()==EpicWeaknessType.TICK_CHECK) {
 					weak.checkAndApply(event);
 				}
+				IEpicPower[] powers = d.getPowers();
+				for(int i = 0; i < powers.length; i++) {
+					if(powers[i].getType()==EpicPowerType.TICK) {
+						powers[i].activatePower(event);
+					}
+				}
 			}
 		}
 	}
@@ -274,14 +280,12 @@ public class EpicRegistry {
 					thing = thing % poss.size();
 					IEpicPower chosen = poss.get(thing);
 					chosen.activatePower(event);
-					chosen.deactivatePower(p);
 					happen = true;
 				}
 			}
 			for(int i = 0; i < powerList.length && !happen; i++) {
 				if(powerList[i].getType()==EpicPowerType.USABLE_AIR) {
 					powerList[i].activatePower(event);
-					powerList[i].deactivatePower(p);
 					happen = true;
 				}
 			}

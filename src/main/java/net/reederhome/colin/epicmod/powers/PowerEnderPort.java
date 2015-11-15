@@ -36,8 +36,6 @@ public class PowerEnderPort implements IEpicPower {
 		evt.entityPlayer.setPositionAndUpdate(dx, dy, dz);
 	}
 
-	@Override
-	public void deactivatePower(EntityLivingBase base) {}
 
 	@Override
 	public int getLevel() {

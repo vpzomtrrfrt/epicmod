@@ -29,8 +29,6 @@ public class PowerSummonWater implements IEpicPower {
 		event.setCanceled(true);
 	}
 
-	@Override
-	public void deactivatePower(EntityLivingBase base) {}
 
 	@Override
 	public int getLevel() {

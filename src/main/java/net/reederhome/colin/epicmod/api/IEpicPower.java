@@ -8,6 +8,5 @@ public interface IEpicPower {
 	public String getName();
 	public EpicPowerType getType();
 	public void activatePower(Event event);
-	public void deactivatePower(EntityLivingBase base);
 	public int getLevel();
 }

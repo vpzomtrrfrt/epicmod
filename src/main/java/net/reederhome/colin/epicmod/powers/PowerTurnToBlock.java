@@ -42,9 +42,6 @@ public class PowerTurnToBlock implements IEpicPower {
 	}
 
 	@Override
-	public void deactivatePower(EntityLivingBase base) {}
-
-	@Override
 	public int getLevel() {
 		return 2;
 	}
