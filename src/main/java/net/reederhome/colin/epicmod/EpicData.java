@@ -63,12 +63,19 @@ public class EpicData implements IEpicData {
 			l.add(EpicRegistry.get().randomPower());
 			int curLvl = l.get(0).getLevel();
 			weakness = EpicRegistry.get().randomWeakness(curLvl);
-			while(curLvl<weakness.getLevel()) {
+			int skipped = 0;
+			while(curLvl<weakness.getLevel() && skipped < 10) {
 				IEpicPower pwr = EpicRegistry.get().randomPower(weakness.getLevel()+1-curLvl);
 				if(!l.contains(pwr)) {
 					l.add(pwr);
 				}
+				else {
+					skipped++;
+				}
 			}
+			powers = new IEpicPower[l.size()];
+			powers = l.toArray(powers);
+			System.out.println(isEpic());
 		}
 	}
 	

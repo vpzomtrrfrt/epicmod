@@ -2,20 +2,28 @@ package net.reederhome.colin.epicmod;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
+import net.reederhome.colin.epicmod.api.EpicPowerType;
+import net.reederhome.colin.epicmod.api.EpicWeaknessType;
 import net.reederhome.colin.epicmod.api.IEpicData;
 import net.reederhome.colin.epicmod.api.IEpicPower;
 import net.reederhome.colin.epicmod.api.IEpicWeakness;
+import net.reederhome.colin.epicmod.api.IEpicWeaknessEffect;
 
 public class EpicRegistry {
 
@@ -24,6 +32,7 @@ public class EpicRegistry {
 	private HashMap<String,IEpicData> epicMap;
 	private HashMap<String,Class<? extends IEpicPower>> powerMap;
 	private HashMap<String,Class<? extends IEpicWeakness>> weaknessMap;
+	private HashMap<String,Class<? extends IEpicWeaknessEffect>> effectMap;
 	
 	@SubscribeEvent
 	public void loadPlayer(LoadFromFile event) {
@@ -59,8 +68,14 @@ public class EpicRegistry {
 			return epicMap.get(name);
 		}
 		else {
-			return new EpicData(name);
+			IEpicData tr =  new EpicData(name);
+			epicMap.put(name, tr);
+			return tr;
 		}
+	}
+	
+	public IEpicData getDataFromPlayer(ICommandSender p) {
+		return getDataFromPlayer(p.getCommandSenderName());
 	}
 	
 	public IEpicPower loadPower(String name) {
@@ -91,9 +106,25 @@ public class EpicRegistry {
 		return null;
 	}
 	
+	public IEpicWeaknessEffect loadWeaknessEffect(String name) {
+		try {
+			return effectMap.get(name).newInstance();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private String[] getKeys(HashMap<String,?> map) {
+		Set<String> keys = map.keySet();
+		String[] tr = new String[keys.size()];
+		keys.toArray(tr);
+		return tr;
+	}
+	
 	public IEpicPower randomPower() {
 		try {
-			String[] keys = (String[]) powerMap.keySet().toArray();
+			String[] keys = getKeys(powerMap);
 			return powerMap.get(keys[new Random().nextInt(keys.length)]).newInstance();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -124,6 +155,18 @@ public class EpicRegistry {
 		return randomPower(maxLevel);
 	}
 	
+	public IEpicWeakness randomWeakness() {
+		try {
+			String[] keys = getKeys(weaknessMap);
+			return weaknessMap.get(keys[new Random().nextInt(keys.length)]).newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return randomWeakness();
+	}
+	
 	public IEpicWeakness randomWeakness(int minLevel) {
 		try {
 			List<IEpicWeakness> poss = new ArrayList<IEpicWeakness>();
@@ -135,6 +178,9 @@ public class EpicRegistry {
 				if(thing.getLevel()>=minLevel) {
 					poss.add(thing);
 				}
+			}
+			if(poss.size()==0) {
+				return randomWeakness();
 			}
 			return poss.get(new Random().nextInt(poss.size()));
 		} catch(InstantiationException e) {
@@ -149,10 +195,19 @@ public class EpicRegistry {
 		powerMap.put(n, c);
 	}
 	
+	public void registerWeakness(Class<? extends IEpicWeakness> c, String n) {
+		weaknessMap.put(n, c);
+	}
+	
+	public void registerWeaknessEffect(Class<? extends IEpicWeaknessEffect> c, String n) {
+		effectMap.put(n, c);
+	}
+	
 	private EpicRegistry() {
 		epicMap = new HashMap<String, IEpicData>();
 		powerMap = new HashMap<String, Class<? extends IEpicPower>>();
 		weaknessMap = new HashMap<String, Class<? extends IEpicWeakness>>();
+		effectMap = new HashMap<String, Class<? extends IEpicWeaknessEffect>>();
 	}
 	
 	public static EpicRegistry get() {
@@ -160,5 +215,54 @@ public class EpicRegistry {
 			instance = new EpicRegistry();
 		}
 		return instance;
+	}
+
+	public IEpicWeaknessEffect randomEffect() {
+		try {
+			String[] keys = getKeys(effectMap);
+			return effectMap.get(keys[new Random().nextInt(keys.length)]).newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return randomEffect();
+	}
+	
+	@SubscribeEvent
+	public void onLivingUpdate(LivingUpdateEvent event) {
+		if(event.entity instanceof EntityPlayer) {
+			EntityPlayer p = (EntityPlayer)event.entity;
+			IEpicData d = EpicRegistry.get().getDataFromPlayer(p);
+			if(d.isEpic()) {
+				IEpicWeakness weak = d.getWeakness();
+				if(weak.getType()==EpicWeaknessType.TICK_CHECK) {
+					weak.checkAndApply(event);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onBlockClicked(PlayerInteractEvent event) {
+		EntityPlayer p = event.entityPlayer;
+		IEpicData d = EpicRegistry.get().getDataFromPlayer(p);
+		if(d.isEpic() && p.isSneaking()) {
+			int thing = 0;
+			if(event.action==PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+				thing++;
+			}
+			List<IEpicPower> poss = new ArrayList<IEpicPower>();
+			IEpicPower[] powerList = d.getPowers();
+			for(int i = 0; i < powerList.length; i++) {
+				if(powerList[i].getType()==EpicPowerType.USABLE) {
+					poss.add(powerList[i]);
+				}
+			}
+			thing = thing % poss.size();
+			IEpicPower chosen = poss.get(thing);
+			chosen.activatePower(event);
+			chosen.deactivatePower(p);
+		}
 	}
 }

@@ -42,4 +42,19 @@ public class EpicApi {
 			e.printStackTrace();
 		}
 	}
+	public static void registerWeakness(Class<? extends IEpicWeakness> weaknessClass, String baseName) {
+		callOnRegistry("registerWeakness", weaknessClass, baseName);
+	}
+	
+	public static void registerWeaknessEffect(Class<? extends IEpicWeaknessEffect> weaknessClass, String baseName) {
+		callOnRegistry("registerWeaknessEffect", weaknessClass, baseName);
+	}
+	
+	public static void registerWeaknessEffect(Class<? extends IEpicWeaknessEffect> weaknessEffectClass) {
+		try {
+			registerWeaknessEffect(weaknessEffectClass, weaknessEffectClass.newInstance().getName());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
