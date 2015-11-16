@@ -13,6 +13,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.reederhome.colin.epicmod.api.EpicApi;
+import net.reederhome.colin.epicmod.powers.PowerBonemeal;
 import net.reederhome.colin.epicmod.powers.PowerEnderPort;
 import net.reederhome.colin.epicmod.powers.PowerFireResistance;
 import net.reederhome.colin.epicmod.powers.PowerJumpBoost;
@@ -45,6 +46,7 @@ public class EpicMod {
 		EpicApi.registerPower(PowerSummonWater.class);
 		EpicApi.registerPower(PowerEnderPort.class);
 		EpicApi.registerPower(PowerFireResistance.class);
+		EpicApi.registerPower(PowerBonemeal.class);
 		EpicApi.registerPower(PowerJumpBoost.class, PowerJumpBoost.baseName);
 		EpicApi.registerWeakness(WeaknessWater.class, WeaknessWater.baseName);
 		EpicApi.registerWeakness(WeaknessFire.class, WeaknessFire.baseName);

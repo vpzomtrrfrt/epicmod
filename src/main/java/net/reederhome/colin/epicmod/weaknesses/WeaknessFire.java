@@ -32,5 +32,8 @@ public class WeaknessFire extends WeaknessBaseEffect {
 	public int getBaseLevel() {
 		return 1;
 	}
+	
+	public WeaknessFire(String name) {super(name);}
+	public WeaknessFire() {super();}
 
 }

@@ -32,5 +32,8 @@ public class WeaknessWater extends WeaknessBaseEffect {
 	public int getBaseLevel() {
 		return 1;
 	}
+	
+	public WeaknessWater(String name) {super(name);}
+	public WeaknessWater() {super();}
 
 }

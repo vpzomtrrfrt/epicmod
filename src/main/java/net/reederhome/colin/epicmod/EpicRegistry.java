@@ -50,6 +50,7 @@ public class EpicRegistry {
 		if(ta == null) {
 			ta = new EpicData(name);
 		}
+		epicMap.put(name, ta);
 	}
 	
 	@SubscribeEvent
@@ -288,6 +289,7 @@ public class EpicRegistry {
 					thing = thing % poss.size();
 					IEpicPower chosen = poss.get(thing);
 					chosen.activatePower(event);
+					p.getFoodStats().addExhaustion(0.1f);
 					happen = true;
 				}
 			}

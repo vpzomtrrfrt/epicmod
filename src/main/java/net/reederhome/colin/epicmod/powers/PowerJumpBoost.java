@@ -23,7 +23,7 @@ public class PowerJumpBoost extends PowerPotionEffect {
 
 	@Override
 	public PotionEffect getPotionEffect() {
-		return new PotionEffect(Potion.jump.id, 1, getLevel()*2);
+		return new PotionEffect(Potion.jump.id, 2, getLevel()*2);
 	}
 
 	public PowerJumpBoost() {
