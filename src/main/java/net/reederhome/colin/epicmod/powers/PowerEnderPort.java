@@ -4,7 +4,7 @@ import java.util.Random;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.reederhome.colin.epicmod.api.EpicPowerType;
 import net.reederhome.colin.epicmod.api.IEpicPower;
 
@@ -22,18 +22,18 @@ public class PowerEnderPort implements IEpicPower {
 
 	@Override
 	public void activatePower(Event event) {
-		PlayerInteractEvent evt = (PlayerInteractEvent)event;
-		int range = 4;
-		int dx = evt.x+new Random().nextInt(range*2)-range;
-		int dy = evt.y+new Random().nextInt(range*2)-range;
-		int dz = evt.z+new Random().nextInt(range*2)-range;
-		while(!evt.world.isAirBlock(dx, dy, dz) || !evt.world.isAirBlock(dx, dy+1, dz)) {
+		LivingEvent evt = (LivingEvent)event;
+		int range = 8;
+		int dx = (int)evt.entity.posX+new Random().nextInt(range*2)-range;
+		int dy = (int)evt.entity.posY+new Random().nextInt(range*2)-range;
+		int dz = (int)evt.entity.posZ+new Random().nextInt(range*2)-range;
+		while(!evt.entity.worldObj.isAirBlock(dx, dy, dz) || !evt.entity.worldObj.isAirBlock(dx, dy+1, dz)) {
 			dy++;
 		}
-		while(evt.world.isAirBlock(dx, dy-1, dz)) {
+		while(evt.entity.worldObj.isAirBlock(dx, dy-1, dz)) {
 			dy--;
 		}
-		evt.entityPlayer.setPositionAndUpdate(dx, dy, dz);
+		evt.entityLiving.setPositionAndUpdate(dx, dy, dz);
 	}
 
 
