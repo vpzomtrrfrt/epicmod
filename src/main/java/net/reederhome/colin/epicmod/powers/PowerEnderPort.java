@@ -42,4 +42,6 @@ public class PowerEnderPort implements IEpicPower {
 		return 3;
 	}
 
+	@Override
+	public boolean selfConflict() {return false;}
 }

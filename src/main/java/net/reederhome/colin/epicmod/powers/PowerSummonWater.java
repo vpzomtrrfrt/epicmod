@@ -34,5 +34,8 @@ public class PowerSummonWater implements IEpicPower {
 	public int getLevel() {
 		return 1;
 	}
+	
+	@Override
+	public boolean selfConflict() {return false;}
 
 }

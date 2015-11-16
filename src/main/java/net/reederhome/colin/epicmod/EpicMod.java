@@ -23,6 +23,7 @@ import net.reederhome.colin.epicmod.weaknesses.WeaknessFire;
 import net.reederhome.colin.epicmod.weaknesses.WeaknessWater;
 import net.reederhome.colin.epicmod.weaknesses.effects.EffectDamage;
 import net.reederhome.colin.epicmod.weaknesses.effects.EffectHunger;
+import net.reederhome.colin.epicmod.weaknesses.effects.EffectSlowness;
 
 @Mod(modid = EpicMod.MODID, name = EpicMod.NAME)
 public class EpicMod {
@@ -49,6 +50,7 @@ public class EpicMod {
 		EpicApi.registerWeakness(WeaknessFire.class, WeaknessFire.baseName);
 		EpicApi.registerWeaknessEffect(EffectDamage.class);
 		EpicApi.registerWeaknessEffect(EffectHunger.class);
+		EpicApi.registerWeaknessEffect(EffectSlowness.class);
 		
 		proxy.things();
 	}

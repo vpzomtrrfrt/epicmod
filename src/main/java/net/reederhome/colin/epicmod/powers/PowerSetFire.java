@@ -37,5 +37,8 @@ public class PowerSetFire implements IEpicPower {
 	public boolean equals(Object o) {
 		return o.getClass()==getClass();
 	}
+	
+	@Override
+	public boolean selfConflict() {return false;}
 
 }

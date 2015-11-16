@@ -60,19 +60,27 @@ public class EpicData implements IEpicData {
 		this.name = name;
 	}
 	
-	private boolean pwrConflict(Collection<IEpicPower> l, String name) {
+	private boolean pwrConflict(Collection<IEpicPower> l, IEpicPower power) {
+		String pn = power.getName();
+		String pns = pn;
+		int ind = pn.indexOf('.');
+		if(ind>-1) {
+			pns = pns.substring(0, ind);
+		}
 		Iterator<IEpicPower> it = l.iterator();
 		while(it.hasNext()) {
 			IEpicPower c = it.next();
-			if(c.getName().equalsIgnoreCase(name)) {
+			String cn = c.getName();
+			String cns = cn;
+			int ind2 = cn.indexOf('.');
+			if(ind2>-1) {
+				cns = cn.substring(0, ind2);
+			}
+			if(cn.equalsIgnoreCase(pn) || (c.selfConflict() && cns.equalsIgnoreCase(pns))) {
 				return true;
 			}
 		}
 		return false;
-	}
-	
-	private boolean pwrConflict(Collection<IEpicPower> l, IEpicPower power) {
-		return pwrConflict(l, power.getName());
 	}
 	
 	public void makeEpic() {

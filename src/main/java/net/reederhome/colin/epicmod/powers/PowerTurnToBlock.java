@@ -45,5 +45,8 @@ public class PowerTurnToBlock implements IEpicPower {
 	public int getLevel() {
 		return 2;
 	}
+	
+	@Override
+	public boolean selfConflict() {return false;}
 
 }

@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 
 public interface IEpicPower {
 
+	public boolean selfConflict();
 	public String getName();
 	public EpicPowerType getType();
 	public void activatePower(Event event);

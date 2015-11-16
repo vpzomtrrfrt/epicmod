@@ -9,6 +9,7 @@ public class PowerJumpBoost extends PowerPotionEffect {
 
 	private int lvl;
 	public static final String baseName = "jumpBoost";
+	public boolean selfConflict = true;
 	
 	@Override
 	public String getName() {
@@ -28,4 +29,11 @@ public class PowerJumpBoost extends PowerPotionEffect {
 	public PowerJumpBoost() {
 		lvl = new Random().nextInt(4)+1;
 	}
+	
+	public PowerJumpBoost(String name) {
+		lvl = Integer.parseInt(name.substring(name.indexOf('.')+1));
+	}
+	
+	@Override
+	public boolean selfConflict() {return true;}
 }

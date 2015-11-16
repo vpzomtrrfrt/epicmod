@@ -19,5 +19,8 @@ public class PowerFireResistance extends PowerPotionEffect {
 	public PotionEffect getPotionEffect() {
 		return new PotionEffect(Potion.fireResistance.id, 2);
 	}
+	
+	@Override
+	public boolean selfConflict() {return false;}
 
 }
