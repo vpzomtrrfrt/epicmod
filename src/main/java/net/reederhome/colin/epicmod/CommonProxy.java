@@ -11,6 +11,6 @@ public class CommonProxy {
 	
 	public void things() {
 		netWrap = NetworkRegistry.INSTANCE.newSimpleChannel(EpicMod.MODID);
-		netWrap.registerMessage(MessageAirPower.Handler.class, MessageAirPower.class, 0, Side.SERVER);
+		netWrap.registerMessage(MessageAirPower.Handler.class, MessageAirPower.class, 1, Side.SERVER);
 	}
 }
