@@ -10,14 +10,16 @@ import java.util.Random;
 import java.util.Set;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.WorldEvent.Unload;
 import net.reederhome.colin.epicmod.api.EpicPowerType;
 import net.reederhome.colin.epicmod.api.EpicWeaknessType;
 import net.reederhome.colin.epicmod.api.IEpicData;
@@ -51,6 +53,7 @@ public class EpicRegistry {
 			ta = new EpicData(name);
 		}
 		epicMap.put(name, ta);
+		System.out.println("Loading");
 	}
 	
 	@SubscribeEvent
@@ -64,6 +67,15 @@ public class EpicRegistry {
 			e.printStackTrace();
 		}
 		System.out.println("Saving");
+	}
+	
+	@SubscribeEvent
+	public void onUnloadWorld(Unload event) {
+		int dim = event.world.provider.dimensionId;
+		System.out.println("unloading world "+dim);
+		if(dim==0) {
+			get().epicMap.clear();
+		}
 	}
 	
 	public IEpicData getDataFromPlayer(String name) {
