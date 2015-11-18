@@ -21,7 +21,7 @@ public class WeaknessWater extends WeaknessBaseEffect {
 	@Override
 	public boolean checkAndApply(Event event) {
 		EntityEvent evt = (EntityEvent)event;
-		if(evt.entity.isInWater()) {
+		if(evt.entity.isInWater() || evt.entity.worldObj.isRaining()) {
 			apply(event);
 			return true;
 		}
