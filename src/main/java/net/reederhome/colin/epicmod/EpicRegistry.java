@@ -16,6 +16,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -70,12 +71,9 @@ public class EpicRegistry {
 	}
 	
 	@SubscribeEvent
-	public void onUnloadWorld(Unload event) {
-		int dim = event.world.provider.dimensionId;
-		System.out.println("unloading world "+dim);
-		if(dim==0) {
-			get().epicMap.clear();
-		}
+	public void onPlayerDeath(PlayerDropsEvent event) {
+		System.out.println(event.entity.getCommandSenderName()+" died");
+		epicMap.remove(event.entity.getCommandSenderName());
 	}
 	
 	public IEpicData getDataFromPlayer(String name) {
