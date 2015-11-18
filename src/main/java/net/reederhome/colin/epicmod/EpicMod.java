@@ -1,18 +1,14 @@
 package net.reederhome.colin.epicmod;
 
-import java.io.File;
-
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.reederhome.colin.epicmod.api.EpicApi;
+import net.reederhome.colin.epicmod.items.ItemMotivator;
 import net.reederhome.colin.epicmod.powers.PowerBonemeal;
 import net.reederhome.colin.epicmod.powers.PowerEnderPort;
 import net.reederhome.colin.epicmod.powers.PowerFireResistance;
@@ -37,6 +33,8 @@ public class EpicMod {
 	
 	@SidedProxy(serverSide="net.reederhome.colin.epicmod.CommonProxy", clientSide="net.reederhome.colin.epicmod.client.ClientProxy")
 	public static CommonProxy proxy;
+	
+	public static ItemMotivator itemMotivator = new ItemMotivator();
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

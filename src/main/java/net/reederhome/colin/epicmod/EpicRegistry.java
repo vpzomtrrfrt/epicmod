@@ -10,17 +10,16 @@ import java.util.Random;
 import java.util.Set;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.WorldEvent.Unload;
 import net.reederhome.colin.epicmod.api.EpicPowerType;
 import net.reederhome.colin.epicmod.api.EpicWeaknessType;
 import net.reederhome.colin.epicmod.api.IEpicData;
@@ -73,6 +72,19 @@ public class EpicRegistry {
 	@SubscribeEvent
 	public void onPlayerDeath(PlayerDropsEvent event) {
 		System.out.println(event.entity.getCommandSenderName()+" died");
+		IEpicPower toDrop = null;
+		IEpicPower[] powers = getDataFromPlayer(event.entityPlayer).getPowers();
+		for(int i = 0; i < powers.length; i++) {
+			if(toDrop == null || powers[i].getLevel() > toDrop.getLevel()) {
+				toDrop = powers[i];
+			}
+		}
+		if(toDrop != null) {
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setString("Power", toDrop.getName());
+			EntityItem ent = event.entity.dropItem(EpicMod.itemMotivator, 1);
+			ent.getEntityItem().setTagCompound(tag);
+		}
 		epicMap.remove(event.entity.getCommandSenderName());
 	}
 	
