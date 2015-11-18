@@ -1,0 +1,18 @@
+language: java
+jdk:
+- oraclejdk7
+- openjdk6
+before_deploy:
+  - gradle build
+  - export THE_JAR=$(ls build/libs/epicmod*.jar)
+  - echo "found $THE_JAR for deploying"
+deploy:
+  provider: releases
+  api_key:
+    secure: focJ21ObXumJaD978hpuys17EUFrDGPvAGd8tdajwd+ARJqh011I8xLMimNQdtZIK5P7wK37zV50/mVHW39ax/nVZufK9tWDlbVlzwg83d8FHtHUESZw+hZ/v8C7fKOv/PB68ODl52H4P/jTuif1uvEJpfdutRyOVxbAkw61DNUwb+OSZUUgeBuzkjpCrZXMveVdJMxWu6DUxkl0EcUPxVRAO4jhn70S4q2gkZR5CHt/HvwGMVqd1cksApotYQ1LAiZjln5SM/WYwWHwdlY9aAgHiTesGxIuX1gKCAIua/peaPvbFdZbnT7mOFzD81QkP5vDaMEMqrgwwqnOfKdRX3iDfEwGaiQBKB1xKpjgpMw/+cIUyOTbufOBeKNX1WTf6maXAMpZyftBx+1Hhbn4BLEkgf4ngf5NyEFXGI/JQGpoAs0rMs6uZoZiZc4dlgJYRKuduX1OUg8Q4A0gY8nKMOra8zrIOHvA8cU2i4wF4O6B1kzQTEu2uvXhbTJjcgcFXdxknMCKyJVmsCOr5MlTJkP8Sy7gxcza8wf3hSwB2nADh48VrI5ZDKx4twQxfmTp0VigyOReA5l92YjLmC9mhJCR1QyIVj60kv7bFl1WU6Abt6rSMwzDe9xwvmE61GtbMkCjgyeD06JVUtp2hIq6dVTnUmfWS7cJ+VOuGHX5KhA=
+  file: "${THE_JAR}"
+  on:
+    repo: vpzomtrrfrt/epicmod
+    all_branches: true
+    tags: true
+  prerelease: true
