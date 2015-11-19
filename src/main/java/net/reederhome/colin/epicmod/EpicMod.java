@@ -6,6 +6,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.reederhome.colin.epicmod.api.EpicApi;
 import net.reederhome.colin.epicmod.items.ItemMotivator;
@@ -51,6 +52,8 @@ public class EpicMod {
 		EpicApi.registerWeaknessEffect(EffectDamage.class);
 		EpicApi.registerWeaknessEffect(EffectHunger.class);
 		EpicApi.registerWeaknessEffect(EffectSlowness.class);
+		
+		GameRegistry.registerItem(itemMotivator, "motivator");
 		
 		proxy.things();
 	}
