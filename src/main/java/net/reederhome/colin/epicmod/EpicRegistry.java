@@ -72,18 +72,21 @@ public class EpicRegistry {
 	@SubscribeEvent
 	public void onPlayerDeath(PlayerDropsEvent event) {
 		System.out.println(event.entity.getCommandSenderName()+" died");
-		IEpicPower toDrop = null;
-		IEpicPower[] powers = getDataFromPlayer(event.entityPlayer).getPowers();
-		for(int i = 0; i < powers.length; i++) {
-			if(toDrop == null || powers[i].getLevel() > toDrop.getLevel()) {
-				toDrop = powers[i];
+		IEpicData data = getDataFromPlayer(event.entityPlayer);
+		if(data.isEpic()) {
+			IEpicPower toDrop = null;
+			IEpicPower[] powers = data.getPowers();
+			for(int i = 0; i < powers.length; i++) {
+				if(toDrop == null || powers[i].getLevel() > toDrop.getLevel()) {
+					toDrop = powers[i];
+				}
 			}
-		}
-		if(toDrop != null) {
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setString("Power", toDrop.getName());
-			EntityItem ent = event.entity.dropItem(EpicMod.itemMotivator, 1);
-			ent.getEntityItem().setTagCompound(tag);
+			if(toDrop != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setString("Power", toDrop.getName());
+				EntityItem ent = event.entity.dropItem(EpicMod.itemMotivator, 1);
+				ent.getEntityItem().setTagCompound(tag);
+			}
 		}
 		epicMap.remove(event.entity.getCommandSenderName());
 	}
